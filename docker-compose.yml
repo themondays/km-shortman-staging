@@ -28,7 +28,7 @@ services:
       - POSTGRES_PASSWORD=staging
     image: postgres:9.6-alpine
     ports:
-      - "5432"
+      - "5432:5432"
   client:
     build:
       context: ./km-shortman-client
