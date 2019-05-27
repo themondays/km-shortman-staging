@@ -1,0 +1,47 @@
+version: '2'
+
+services:
+  api:
+    build:
+      context: ./km-shortman
+      dockerfile: Dockerfile.dev
+    command: elixir --erl "+S 1" -S mix do deps.get, ecto.create, ecto.migrate, phx.server
+    image: shortman_api
+    environment:
+      - MIX_ENV=dev
+      - SM_HASHID_SALT=SecretHashSalt
+      - SM_HASHID_LENGTH=10
+    volumes:
+      - .:/app
+    ports:
+      - "4000:4000"
+      - "4001:4001"
+    depends_on:
+      - postgres
+    expose:
+      - "4000"
+      - "4001"
+  postgres:
+    environment:
+      - POSTGRES_DB=staging
+      - POSTGRES_USER=staging
+      - POSTGRES_PASSWORD=staging
+    image: postgres:9.6-alpine
+    ports:
+      - "5432"
+  client:
+    build:
+      context: ./km-shortman-client
+    command: npm run dev
+    image: shortman_client
+    environment:
+      - NODE_ENV=dev
+      - SHORTMAN_API_URL=http://localhost:4001/api/1.0
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+    expose:
+      - "3000"
