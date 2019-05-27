@@ -1,0 +1,6 @@
+[submodule "km-shortman"]
+	path = km-shortman
+	url = https://github.com/themondays/km-shortman
+[submodule "km-shortman-client"]
+	path = km-shortman-client
+	url = https://github.com/themondays/km-shortman-client
